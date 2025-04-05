@@ -17,4 +17,10 @@ app.use(cookieParser()); //cookie-parser is used to access cookies from the user
 //only server can read and remove cookies
 
 
+//routes import
+import userRouter from "./routes/user.routes.js";
+
+//routes diclaration
+app.use("/api/v1/users", userRouter)
+
 export { app };

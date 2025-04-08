@@ -6,7 +6,7 @@ const app = express();
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    Credentials: true,
+    credentials: true,
 }))
 
 app.use(express.json({limit: "16kb" }));
@@ -15,7 +15,6 @@ app.use(express.static("public"));//static is used to store flies like image,pdf
 //public is a folder
 app.use(cookieParser()); //cookie-parser is used to access cookies from the user's browser and perform curd operations on them
 //only server can read and remove cookies
-
 
 //routes import
 import userRouter from "./routes/user.routes.js";

@@ -7,7 +7,7 @@ import { ApiResponse } from "../utils/apiResponse.js";
 const registerUser = asyncHandler(async (req, res) => {
     // get user detail from frontend
     // validate - not empty..
-    // check if user already exists: username, email
+    // check if user already exists: userName, email
     // check for images, check for avatar
     // upload them to cloudinary, avatar
     // create user object- create entry in db
@@ -19,7 +19,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     //get user detail from frontend
     const {fullName, email, userName,password} = req.body
-    console.log("email", email);
+    // console.log("email", email);
 
      // validate - not empty..
     /*if(fullName === "") {
@@ -31,17 +31,24 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
-    // check if user already exists: username, email
+    // check if user already exists: userName, email
     const existedUser = await User.findOne({
         $or : [{ userName }, { email }]
     })
     if(existedUser) {
-        throw new ApiError(409, "User with this email or username already exists")
+        throw new ApiError(409, "User with this email or userName already exists")
     }
-
+    //console.log(req.files);
+    
     // check for images, check for avatar
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    
+    let coverImageLocalPath; //this if condition is same as line no 45
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        coverImageLocalPath = req.files.coverImage[0].path;
+    }
+
     if(!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required")
     }
@@ -61,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
         coverImage : coverImage?.url || "", //if cover image is not provided, then it will be empty string else take url
         email,
         password,
-        userName : userName.toLowerCase()
+        userName : userName.toLowerCase(),
     })
 
     // remove password and refresh token field from response
